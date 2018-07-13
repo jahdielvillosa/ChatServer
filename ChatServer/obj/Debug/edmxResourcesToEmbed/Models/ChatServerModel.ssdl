@@ -1,0 +1,68 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="ChatServerModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2012" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityContainer Name="ChatServerModelStoreContainer">
+    <EntitySet Name="Notifications" EntityType="ChatServerModel.Store.Notifications" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Recipients" EntityType="ChatServerModel.Store.Recipients" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Logs" EntityType="ChatServerModel.Store.Logs" store:Type="Tables" Schema="dbo" />
+    <AssociationSet Name="NotificationsRecipients" Association="ChatServerModel.Store.NotificationsRecipients">
+      <End Role="Notifications" EntitySet="Notifications" />
+      <End Role="Recipients" EntitySet="Recipients" />
+    </AssociationSet>
+    <AssociationSet Name="NotificationsLogs" Association="ChatServerModel.Store.NotificationsLogs">
+      <End Role="Notifications" EntitySet="Notifications" />
+      <End Role="Logs" EntitySet="Logs" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="Notifications">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="ServiceId" Type="int" Nullable="false" />
+    <Property Name="JobId" Type="int" Nullable="false" />
+    <Property Name="AppId" Type="int" Nullable="false" />
+    <Property Name="Message" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Status" Type="nvarchar" Nullable="false" MaxLength="15" />
+  </EntityType>
+  <EntityType Name="Recipients">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Number" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="NotificationsId" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Logs">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="SendDT" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Status" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="NotificationsId" Type="int" Nullable="false" />
+  </EntityType>
+  <Association Name="NotificationsRecipients">
+    <End Role="Notifications" Type="ChatServerModel.Store.Notifications" Multiplicity="1" />
+    <End Role="Recipients" Type="ChatServerModel.Store.Recipients" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Notifications">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Recipients">
+        <PropertyRef Name="NotificationsId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="NotificationsLogs">
+    <End Role="Notifications" Type="ChatServerModel.Store.Notifications" Multiplicity="1" />
+    <End Role="Logs" Type="ChatServerModel.Store.Logs" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Notifications">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Logs">
+        <PropertyRef Name="NotificationsId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema>

@@ -1,0 +1,205 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="ChatServerModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2012" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityContainer Name="ChatServerModelStoreContainer">
+    <EntitySet Name="Notifications" EntityType="ChatServerModel.Store.Notifications" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Recipients" EntityType="ChatServerModel.Store.Recipients" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Logs" EntityType="ChatServerModel.Store.Logs" store:Type="Tables" Schema="dbo" />
+    <AssociationSet Name="NotificationsRecipients" Association="ChatServerModel.Store.NotificationsRecipients">
+      <End Role="Notifications" EntitySet="Notifications" />
+      <End Role="Recipients" EntitySet="Recipients" />
+    </AssociationSet>
+    <AssociationSet Name="NotificationsLogs" Association="ChatServerModel.Store.NotificationsLogs">
+      <End Role="Notifications" EntitySet="Notifications" />
+      <End Role="Logs" EntitySet="Logs" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="Notifications">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="ServiceId" Type="int" Nullable="false" />
+    <Property Name="JobId" Type="int" Nullable="false" />
+    <Property Name="AppId" Type="int" Nullable="false" />
+    <Property Name="Message" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Status" Type="nvarchar" Nullable="false" MaxLength="15" />
+  </EntityType>
+  <EntityType Name="Recipients">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Number" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="NotificationsId" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Logs">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="SendDT" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Status" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="NotificationsId" Type="int" Nullable="false" />
+  </EntityType>
+  <Association Name="NotificationsRecipients">
+    <End Role="Notifications" Type="ChatServerModel.Store.Notifications" Multiplicity="1" />
+    <End Role="Recipients" Type="ChatServerModel.Store.Recipients" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Notifications">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Recipients">
+        <PropertyRef Name="NotificationsId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="NotificationsLogs">
+    <End Role="Notifications" Type="ChatServerModel.Store.Notifications" Multiplicity="1" />
+    <End Role="Logs" Type="ChatServerModel.Store.Logs" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Notifications">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Logs">
+        <PropertyRef Name="NotificationsId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema xmlns="http://schemas.microsoft.com/ado/2009/11/edm" xmlns:cg="http://schemas.microsoft.com/ado/2006/04/codegeneration" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" Namespace="ChatServerModel" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" annotation:UseStrongSpatialTypes="false">
+        <EntityContainer Name="ChatServerModelContainer" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Notifications" EntityType="ChatServerModel.Notifications" />
+          <EntitySet Name="Recipients" EntityType="ChatServerModel.Recipients" />
+          <EntitySet Name="Logs" EntityType="ChatServerModel.Logs" />
+          <AssociationSet Name="NotificationsRecipients" Association="ChatServerModel.NotificationsRecipients">
+            <End Role="Notifications" EntitySet="Notifications" />
+            <End Role="Recipients" EntitySet="Recipients" />
+          </AssociationSet>
+          <AssociationSet Name="NotificationsLogs" Association="ChatServerModel.NotificationsLogs">
+            <End Role="Notifications" EntitySet="Notifications" />
+            <End Role="Logs" EntitySet="Logs" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="Notifications">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ServiceId" Type="Int32" Nullable="false" />
+          <Property Name="JobId" Type="Int32" Nullable="false" />
+          <Property Name="AppId" Type="Int32" Nullable="false" />
+          <Property Name="Message" Type="String" Nullable="false" />
+          <Property Name="Status" Type="String" Nullable="false" MaxLength="15" />
+          <NavigationProperty Name="Recipients" Relationship="ChatServerModel.NotificationsRecipients" FromRole="Notifications" ToRole="Recipients" />
+          <NavigationProperty Name="Logs" Relationship="ChatServerModel.NotificationsLogs" FromRole="Notifications" ToRole="Logs" />
+        </EntityType>
+        <EntityType Name="Recipients">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Number" Type="String" Nullable="false" />
+          <NavigationProperty Name="Notification" Relationship="ChatServerModel.NotificationsRecipients" FromRole="Recipients" ToRole="Notifications" />
+          <Property Name="NotificationsId" Type="Int32" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Logs">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="SendDT" Type="String" Nullable="false" />
+          <Property Name="Status" Type="String" Nullable="false" />
+          <NavigationProperty Name="Notification" Relationship="ChatServerModel.NotificationsLogs" FromRole="Logs" ToRole="Notifications" />
+          <Property Name="NotificationsId" Type="Int32" Nullable="false" />
+        </EntityType>
+        <Association Name="NotificationsRecipients">
+          <End Type="ChatServerModel.Notifications" Role="Notifications" Multiplicity="1" />
+          <End Type="ChatServerModel.Recipients" Role="Recipients" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Notifications">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Recipients">
+              <PropertyRef Name="NotificationsId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="NotificationsLogs">
+          <End Type="ChatServerModel.Notifications" Role="Notifications" Multiplicity="1" />
+          <End Type="ChatServerModel.Logs" Role="Logs" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Notifications">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Logs">
+              <PropertyRef Name="NotificationsId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+    <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="ChatServerModelStoreContainer" CdmEntityContainer="ChatServerModelContainer">
+    <EntitySetMapping Name="Notifications">
+      <EntityTypeMapping TypeName="IsTypeOf(ChatServerModel.Notifications)">
+        <MappingFragment StoreEntitySet="Notifications">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="ServiceId" ColumnName="ServiceId" />
+          <ScalarProperty Name="JobId" ColumnName="JobId" />
+          <ScalarProperty Name="AppId" ColumnName="AppId" />
+          <ScalarProperty Name="Message" ColumnName="Message" />
+          <ScalarProperty Name="Status" ColumnName="Status" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Recipients">
+      <EntityTypeMapping TypeName="IsTypeOf(ChatServerModel.Recipients)">
+        <MappingFragment StoreEntitySet="Recipients">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Number" ColumnName="Number" />
+          <ScalarProperty Name="NotificationsId" ColumnName="NotificationsId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Logs">
+      <EntityTypeMapping TypeName="IsTypeOf(ChatServerModel.Logs)">
+        <MappingFragment StoreEntitySet="Logs">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="SendDT" ColumnName="SendDT" />
+          <ScalarProperty Name="Status" ColumnName="Status" />
+          <ScalarProperty Name="NotificationsId" ColumnName="NotificationsId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping></edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <edmx:Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </edmx:Connection>
+    <edmx:Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="True" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+        <DesignerProperty Name="UseLegacyProvider" Value="False" />
+      </DesignerInfoPropertySet>
+    </edmx:Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>
